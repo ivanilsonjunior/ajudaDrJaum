@@ -40,6 +40,17 @@ def handleUpload():
         files.append( file_name + ' | ' + str(size) + ' bytes')
     return render_template('upload.html', files=files)
 
+@app.route('/admin/deleteAll', methods=['POST'])
+@auth.login_required
+def handleRemoveAll():
+    caminho = app.config['UPLOAD_PATH']
+    for file_name in os.listdir(caminho):
+        # construct full file path
+        file = caminho + file_name
+        if os.path.isfile(file):
+            os.remove(file)
+    return redirect('upload')
+
 @app.route('/admin/upload', methods=['POST'])
 @auth.login_required
 def upload_files():
