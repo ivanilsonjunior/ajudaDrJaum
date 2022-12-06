@@ -45,7 +45,6 @@ def handleUpload():
 def handleRemoveAll():
     caminho = app.config['UPLOAD_PATH']
     for file_name in os.listdir(caminho):
-        # construct full file path
         file = caminho + file_name
         if os.path.isfile(file):
             os.remove(file)
@@ -61,7 +60,6 @@ def upload_files():
         if file_ext not in app.config['UPLOAD_EXTENSIONS']:
             abort(400)
         uploaded_file.save(os.path.join(app.config['UPLOAD_PATH'], filename))
-        arquivo = open(app.config['UPLOAD_PATH'] + filename, "rb")
     return redirect('upload')
 
 if __name__ == '__main__':
