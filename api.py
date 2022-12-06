@@ -32,7 +32,13 @@ def hello():
 @app.route('/admin/upload')
 @auth.login_required
 def handleUpload():
-    return render_template('upload.html')
+    dir_name = os.path.join(app.config['UPLOAD_PATH'])
+    files = []
+    list_of_files = filter( lambda x: os.path.isfile(os.path.join(dir_name, x)), os.listdir(dir_name) )
+    files_with_size = [ (file_name, os.stat(os.path.join(dir_name, file_name)).st_size) for file_name in list_of_files  ]
+    for file_name, size in files_with_size:
+        files.append( file_name + ' | ' + str(size) + ' bytes')
+    return render_template('upload.html', files=files)
 
 @app.route('/admin/upload', methods=['POST'])
 @auth.login_required
@@ -45,7 +51,7 @@ def upload_files():
             abort(400)
         uploaded_file.save(os.path.join(app.config['UPLOAD_PATH'], filename))
         arquivo = open(app.config['UPLOAD_PATH'] + filename, "rb")
-    return render_template('upload.html')
+    return redirect('upload')
 
 if __name__ == '__main__':
     app.run(host="0.0.0.0", port=9001 ,debug=True)
