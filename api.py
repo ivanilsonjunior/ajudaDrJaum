@@ -1,6 +1,5 @@
 # app.py
 from flask import Flask, render_template, send_file, Response, abort, jsonify, request, url_for, redirect
-from sqlalchemy.sql import text
 from werkzeug.utils import secure_filename
 # Para a autenticação
 from flask_httpauth import HTTPBasicAuth
